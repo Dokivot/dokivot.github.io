@@ -1,0 +1,25 @@
+---
+import { Sprout, Leaf, TreePine } from '@lucide/astro';
+import { MATURITY_LABELS, MATURITY_ICONS } from '../lib/constants';
+
+interface Props {
+  maturity: 'seedling' | 'budding' | 'evergreen';
+}
+
+const { maturity } = Astro.props;
+const colorVar = `--color-maturity-${maturity}`;
+const iconMap: Record<string, typeof Sprout> = {
+  Sprout,
+  Leaf,
+  TreePine,
+};
+const Icon = iconMap[MATURITY_ICONS[maturity]];
+---
+
+<span
+  class="inline-flex items-center gap-1 rounded px-2 py-0.5 text-xs font-medium"
+  style={`background-color: color-mix(in srgb, var(${colorVar}) 10%, transparent); color: var(${colorVar});`}
+>
+  <Icon size={14} />
+  {MATURITY_LABELS[maturity]}
+</span>

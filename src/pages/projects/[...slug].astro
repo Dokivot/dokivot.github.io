@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((p) => ({ params: { slug: p.id } }));
+}
+
+const { slug } = Astro.params;
+const projects = await getCollection('projects');
+const project = projects.find((p) => p.id === slug);
+
+if (!project) return Astro.redirect('/404');
+
+const { Content } = await render(project);
+
+const statusLabel: Record<string, string> = {
+  active: 'Active',
+  completed: 'Completed',
+  archived: 'Archived',
+};
+---
+
+<BaseLayout title={project.data.title} description={project.data.description}>
+  <article class="mx-auto max-w-[65ch] px-4 py-16">
+    <header class="mb-8">
+      <h1 class="text-h1 font-bold" style="font-family: var(--font-heading);">
+        {project.data.title}
+      </h1>
+      <p class="mt-4 text-[var(--color-text-secondary)]">{project.data.description}</p>
+      <div class="mt-4 flex flex-wrap gap-2">
+        <span class="rounded bg-[var(--color-bg-tertiary)] px-3 py-1 text-sm text-[var(--color-text-secondary)]">
+          {statusLabel[project.data.status]}
+        </span>
+        {project.data.tech_stack.map((tech: string) => (
+          <span class="rounded bg-[var(--color-bg-tertiary)] px-3 py-1 text-sm text-[var(--color-text-secondary)]">
+            {tech}
+          </span>
+        ))}
+      </div>
+      <div class="mt-4 flex gap-4">
+        {project.data.repo_url && (
+          <a href={project.data.repo_url} class="text-sm text-[var(--color-accent)]" target="_blank" rel="noopener noreferrer">
+            View Repository &rarr;
+          </a>
+        )}
+        {project.data.demo_url && (
+          <a href={project.data.demo_url} class="text-sm text-[var(--color-accent)]" target="_blank" rel="noopener noreferrer">
+            Live Demo &rarr;
+          </a>
+        )}
+      </div>
+    </header>
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .text-h1 { font-size: 2rem; line-height: 1.3; }
+</style>

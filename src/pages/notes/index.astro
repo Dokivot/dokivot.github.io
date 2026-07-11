@@ -1,0 +1,83 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Card from '../../components/Card.astro';
+import MaturityBadge from '../../components/MaturityBadge.astro';
+import TagList from '../../components/TagList.astro';
+import { getCollection } from 'astro:content';
+import { formatDate } from '../../lib/utils';
+
+const tag = Astro.url.searchParams.get('tag');
+const maturity = Astro.url.searchParams.get('maturity');
+
+const notes = await getCollection('notes', ({ data }) => {
+  if (tag && !data.tags.includes(tag)) return false;
+  if (maturity && data.maturity !== maturity) return false;
+  return true;
+});
+notes.sort((a, b) => b.data.updated.getTime() - a.data.updated.getTime());
+
+const allMaturities = ['seedling', 'budding', 'evergreen'] as const;
+---
+
+<BaseLayout title="Notes">
+  <div class="mx-auto max-w-2xl px-4 py-16">
+    <h1 class="text-h1 font-bold" style="font-family: var(--font-heading);">Notes</h1>
+    <div class="mt-4 flex flex-wrap gap-2">
+      <a
+        href="/notes"
+        class={`rounded px-3 py-1 text-sm no-underline transition-colors duration-150 ${
+          !maturity
+            ? 'bg-[var(--color-accent)] text-white hover:text-white'
+            : 'bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)] hover:text-[var(--color-accent)]'
+        }`}
+      >
+        All
+      </a>
+      {allMaturities.map((m) => (
+        <a
+          href={`/notes?maturity=${m}`}
+          class={`rounded px-3 py-1 text-sm no-underline transition-colors duration-150 ${
+            maturity === m
+              ? 'bg-[var(--color-accent)] text-white hover:text-white'
+              : 'bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)] hover:text-[var(--color-accent)]'
+          }`}
+        >
+          {m.charAt(0).toUpperCase() + m.slice(1)}
+        </a>
+      ))}
+    </div>
+    <div class="mt-8 space-y-4">
+      {notes.length === 0 ? (
+        <p class="text-[var(--color-text-secondary)]">No notes yet.</p>
+      ) : (
+        notes.map((note) => (
+          <a
+            href={`/notes/${note.id}/`}
+            class="block rounded border border-[var(--color-border-light)] bg-[var(--color-bg-tertiary)] p-6 no-underline transition-colors duration-150 hover:border-[var(--color-border)]"
+          >
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h3 class="text-lg font-semibold text-[var(--color-text)]" style="font-family: var(--font-heading);">
+                  {note.data.title}
+                </h3>
+                <p class="mt-1 text-sm text-[var(--color-text-secondary)]">
+                  Updated {formatDate(note.data.updated)}
+                </p>
+              </div>
+              <MaturityBadge maturity={note.data.maturity} />
+            </div>
+            {note.data.tags.length > 0 && (
+              <div class="mt-3">
+                <TagList tags={note.data.tags} linkPrefix="/notes" />
+              </div>
+            )}
+          </a>
+        ))
+      )}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .text-h1 { font-size: 2rem; line-height: 1.3; }
+</style>

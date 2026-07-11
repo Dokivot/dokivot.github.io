@@ -1,0 +1,131 @@
+@import 'tailwindcss';
+
+@plugin '@tailwindcss/typography';
+
+@theme {
+  --font-heading: 'Source Serif 4', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+
+  --color-accent: #4f46e5;
+  --color-accent-hover: #4338ca;
+  --color-bg: #ffffff;
+  --color-bg-secondary: #f8fafc;
+  --color-bg-tertiary: #f1f5f9;
+  --color-text: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-tertiary: #94a3b8;
+  --color-border: #e2e8f0;
+  --color-border-light: #f1f5f9;
+
+  --color-maturity-seedling: #65a30d;
+  --color-maturity-budding: #d97706;
+  --color-maturity-evergreen: #4f46e5;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  .dark {
+    --color-bg: #0f172a;
+    --color-bg-secondary: #1e293b;
+    --color-bg-tertiary: #334155;
+    --color-text: #e2e8f0;
+    --color-text-secondary: #94a3b8;
+    --color-text-tertiary: #64748b;
+    --color-accent: #818cf8;
+    --color-accent-hover: #a5b4fc;
+    --color-border: #334155;
+    --color-border-light: #1e293b;
+  }
+
+  html {
+    font-family: var(--font-body);
+    color: var(--color-text);
+    background-color: var(--color-bg);
+  }
+
+  body {
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+  }
+
+  :not(pre) > code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    background-color: var(--color-bg-secondary);
+    color: var(--color-accent);
+    border-radius: 3px;
+    padding: 0.125em 0.375em;
+  }
+
+  pre {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    background-color: var(--color-bg-secondary);
+    border-radius: 4px;
+    padding: 1rem;
+    overflow-x: auto;
+  }
+
+  blockquote {
+    border-left: 3px solid var(--color-accent);
+    padding-left: 1rem;
+    color: var(--color-text-secondary);
+  }
+
+  a {
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: color 150ms ease-out;
+  }
+
+  a:hover {
+    color: var(--color-accent-hover);
+    text-decoration: underline;
+  }
+
+  .prose {
+    max-width: 65ch;
+  }
+
+  .prose a {
+    text-decoration: underline;
+  }
+
+  .prose pre {
+    background-color: var(--color-bg-secondary);
+  }
+
+  .prose code {
+    font-family: var(--font-mono);
+  }
+
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4 {
+    font-family: var(--font-heading);
+  }
+
+  .prose img {
+    border-radius: 4px;
+  }
+
+  .katex-display > .katex {
+    text-align: center;
+  }
+
+  .katex {
+    font-size: 1.05em;
+  }
+
+  button, a, .interactive {
+    transition: color 150ms ease-out, border-color 150ms ease-out, background-color 150ms ease-out, opacity 150ms ease-out;
+  }
+}
