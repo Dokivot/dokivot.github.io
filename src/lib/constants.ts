@@ -16,7 +16,7 @@ export const NAV_ITEMS = [
 
 export const SOCIAL_LINKS = {
   github: 'https://github.com/Dokivot',
-  email: 'mailto:dokivot@example.com',
+  email: 'mailto:dokivot@outlook.com',
   twitter: 'https://x.com/Dokivot',
   scholar: 'https://scholar.google.com/citations?user=Dokivot',
 } as const;

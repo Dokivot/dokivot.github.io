@@ -2,9 +2,18 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Card from '../components/Card.astro';
 import MaturityBadge from '../components/MaturityBadge.astro';
-import { SITE } from '../lib/constants';
+import { SITE, SOCIAL_LINKS } from '../lib/constants';
 import { getCollection } from 'astro:content';
 import { formatDate } from '../lib/utils';
+import {
+  Code2,
+  Mail,
+  Rss,
+  FileText,
+  FolderGit2,
+  StickyNote,
+} from '@lucide/astro';
+import SocialIcon from '../components/SocialIcon.astro';
 
 const blogPosts = await getCollection('blog', ({ data }) => !data.draft);
 blogPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
@@ -21,11 +30,14 @@ const recentNotes = allNotes.slice(0, 5);
 
 <BaseLayout>
   <section
-    class="relative overflow-hidden px-4 pb-12 pt-24 sm:pt-32"
+    class="noise-overlay relative overflow-hidden px-4 pb-12 pt-24 sm:pt-32"
     style="background: linear-gradient(180deg, var(--color-bg), color-mix(in srgb, var(--color-accent) 3%, transparent));"
   >
-    <div class="mx-auto max-w-2xl text-center">
-      <h1 class="text-hero font-bold" style="font-family: var(--font-heading);">
+    <div class="mx-auto max-w-2xl text-center relative z-10">
+      <span aria-hidden="true" class="inline-block opacity-30" style="color: var(--color-accent);">
+        <Code2 size={48} />
+      </span>
+      <h1 class="text-hero mt-3 font-bold" style="font-family: var(--font-heading);">
         {SITE.title}
       </h1>
       <p class="mt-4 text-lg" style="color: var(--color-text-secondary);">
@@ -47,14 +59,63 @@ const recentNotes = allNotes.slice(0, 5);
           About Me
         </a>
       </div>
+      <div class="mt-5 flex items-center justify-center gap-5">
+        <a
+          href={SOCIAL_LINKS.github}
+          aria-label="GitHub"
+          class="hero-social-link no-underline hover:no-underline"
+          style="color: var(--color-text-tertiary);"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <SocialIcon name="github" size={18} />
+        </a>
+        <a
+          href={SOCIAL_LINKS.twitter}
+          aria-label="Twitter / X"
+          class="hero-social-link no-underline hover:no-underline"
+          style="color: var(--color-text-tertiary);"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <SocialIcon name="twitter" size={18} />
+        </a>
+        <a
+          href={SOCIAL_LINKS.scholar}
+          aria-label="Google Scholar"
+          class="hero-social-link no-underline hover:no-underline"
+          style="color: var(--color-text-tertiary);"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <SocialIcon name="scholar" size={18} />
+        </a>
+        <a
+          href={SOCIAL_LINKS.email}
+          aria-label="Email"
+          class="hero-social-link no-underline hover:no-underline"
+          style="color: var(--color-text-tertiary);"
+        >
+          <Mail size={18} />
+        </a>
+        <a
+          href="/blog/rss.xml"
+          aria-label="RSS"
+          class="hero-social-link no-underline hover:no-underline"
+          style="color: var(--color-text-tertiary);"
+        >
+          <Rss size={18} />
+        </a>
+      </div>
     </div>
   </section>
 
   <section class="mx-auto max-w-6xl px-4 py-16">
     <div class="grid gap-12 lg:grid-cols-2">
-      <div>
+      <div class="animate-on-scroll">
         <div class="mb-6 flex items-center justify-between">
-          <h2 class="text-lg font-semibold" style="font-family: var(--font-heading);">
+          <h2 class="flex items-center gap-1.5 text-lg font-semibold" style="font-family: var(--font-heading);">
+            <span style="color: var(--color-accent);"><FileText size={16} /></span>
             Recent Posts
           </h2>
           {blogPosts.length > 3 && (
@@ -79,9 +140,10 @@ const recentNotes = allNotes.slice(0, 5);
         )}
       </div>
 
-      <div>
+      <div class="animate-on-scroll">
         <div class="mb-6 flex items-center justify-between">
-          <h2 class="text-lg font-semibold" style="font-family: var(--font-heading);">
+          <h2 class="flex items-center gap-1.5 text-lg font-semibold" style="font-family: var(--font-heading);">
+            <span style="color: var(--color-accent);"><FolderGit2 size={16} /></span>
             Featured Projects
           </h2>
           {allProjects.length > 3 && (
@@ -107,9 +169,10 @@ const recentNotes = allNotes.slice(0, 5);
       </div>
     </div>
 
-    <div class="mt-12">
+    <div class="mt-12 animate-on-scroll">
       <div class="mb-6 flex items-center justify-between">
-        <h2 class="text-lg font-semibold" style="font-family: var(--font-heading);">
+        <h2 class="flex items-center gap-1.5 text-lg font-semibold" style="font-family: var(--font-heading);">
+          <span style="color: var(--color-accent);"><StickyNote size={16} /></span>
           Recent Notes
         </h2>
         {allNotes.length > 5 && (
@@ -140,11 +203,22 @@ const recentNotes = allNotes.slice(0, 5);
       )}
     </div>
   </section>
+  <script>
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll('.animate-on-scroll').forEach((el) => {
+      observer.observe(el);
+    });
+  </script>
 </BaseLayout>
 
-<style>
-  .text-hero {
-    font-size: 2.5rem;
-    line-height: 1.2;
-  }
-</style>

@@ -113,9 +113,24 @@ revised_at: 2026-07-11
 
 ### 首页 Hero
 
-- 背景：从 `--color-bg` 到 `--color-accent` 的 3% 透明度渐变
-- 渐变区域仅限 Hero 区块，不影响下方内容
+- 背景：双层叠加
+  1. 底色：从 `--color-bg` 到 `--color-accent` 的 3% 透明度渐变（`linear-gradient(180deg, ...)`）
+  2. 纹理：SVG 噪声纹理覆盖层（`feTurbulence` + `feColorMatrix`），透明度 3%-4%，叠加模式 `mix-blend-mode: overlay`
+- 纹理在亮色模式下几乎不可见，在暗色模式下微不可察——仅提供纸张般的质感
+- 装饰区域仅限 Hero 区块，不影响下方内容
 - 内容区域（标题、副标题）为纯色底色，保持可读性
+- 标题上方放置一个装饰性 Lucide 图标（`Code2`），48px，颜色为 `--color-accent` 的 30% 透明度，居中显示
+  - 该图标仅为装饰，无交互行为，`aria-hidden="true"`
+- CTA 按钮下方放置社交链接图标组：
+  - 图标：GitHub（`Github`）、Twitter/X（`Twitter`）、Google Scholar（`GraduationCap`）、Email（`Mail`）、RSS（`Rss`）
+  - 尺寸：18px
+  - 颜色：`--color-text-tertiary`，悬停 `--color-accent`，过渡 150ms ease-out
+  - 间距：1.25rem
+  - 水平居中排列，与 CTA 按钮间距 `space-4`
+- 聚合区块标题（Recent Posts / Featured Projects / Recent Notes）左侧各带对应导航图标（16px，`--color-accent`）
+  - Recent Posts → `FileText`
+  - Featured Projects → `FolderGit2`
+  - Recent Notes → `StickyNote`
 
 ### 导航栏
 
@@ -223,11 +238,19 @@ revised_at: 2026-07-11
 
 ## 八、交互规范
 
-- 所有可交互元素（链接、按钮、卡片、图标）使用 `transition: 150ms ease-out`
-- 过渡属性：`color`、`border-color`、`background-color`、`opacity`
-- 不做 transform 动画（无缩放、无位移），保持页面稳定性
-- 文章正文区域无任何动画
+- 所有可交互元素（链接、按钮、卡片、图标）使用 `transition: 150ms ease-out`，过渡属性：`color`、`border-color`、`background-color`、`opacity`
+- 文章正文区域（博客/笔记/文档详情页）无任何动画
 - 暗色模式切换使用瞬时过渡（不拖尾）
+
+### 首页入场动画
+
+- 聚合区块（Recent Posts / Featured Projects / Recent Notes）在滚动进入视口时触发一次性 fade-in + 微上移动画：
+  - `opacity: 0 → 1`，`transform: translateY(8px) → translateY(0)`
+  - 持续时间：600ms，缓动函数：`ease-out`
+  - 通过 Intersection Observer 触发，`threshold: 0.1`（区块 10% 可见时触发）
+  - 仅触发一次（触发后移除 observer），不重复播放
+  - 无 JS 环境下降级为直接显示（`opacity: 1`），不影响可访问性
+  - Hero 区块不使用入场动画（始终可见）
 
 ## 九、图标库
 
@@ -243,3 +266,5 @@ revised_at: 2026-07-11
 
 - 无阴影（box-shadow），仅用边框表达层级
 - 无评论区、无点赞数、无阅读量显示
+- 文章正文区域无任何动画
+- 卡片、按钮、导航链接无 transform 动画（缩放、位移）

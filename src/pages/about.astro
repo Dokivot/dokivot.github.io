@@ -1,5 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { SOCIAL_LINKS } from '../lib/constants';
+import { Mail, Rss, GraduationCap } from '@lucide/astro';
+import SocialIcon from '../components/SocialIcon.astro';
 ---
 
 <BaseLayout title="About">
@@ -11,16 +14,53 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         This site is my quiet knowledge repository — a place to think through
         hard technical problems, document experiments, and share what I learn.
       </p>
-      <p>
-        More details coming soon.
-      </p>
+    </div>
+
+    <div class="mt-12 border-t border-[var(--color-border-light)] pt-8">
+      <h2 class="text-h2" style="font-family: var(--font-heading);">Find Me</h2>
+      <div class="mt-4 flex flex-wrap items-center gap-4">
+        <a
+          href={SOCIAL_LINKS.github}
+          class="flex items-center gap-2 text-sm text-[var(--color-text-secondary)] no-underline transition-colors duration-150 hover:text-[var(--color-accent)]"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <SocialIcon name="github" />
+          GitHub
+        </a>
+        <a
+          href={SOCIAL_LINKS.twitter}
+          class="flex items-center gap-2 text-sm text-[var(--color-text-secondary)] no-underline transition-colors duration-150 hover:text-[var(--color-accent)]"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <SocialIcon name="twitter" />
+          Twitter
+        </a>
+        <a
+          href={SOCIAL_LINKS.scholar}
+          class="flex items-center gap-2 text-sm text-[var(--color-text-secondary)] no-underline transition-colors duration-150 hover:text-[var(--color-accent)]"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <GraduationCap size={18} />
+          Google Scholar
+        </a>
+        <a
+          href={SOCIAL_LINKS.email}
+          class="flex items-center gap-2 text-sm text-[var(--color-text-secondary)] no-underline transition-colors duration-150 hover:text-[var(--color-accent)]"
+        >
+          <Mail size={18} />
+          Email
+        </a>
+        <a
+          href="/blog/rss.xml"
+          class="flex items-center gap-2 text-sm text-[var(--color-text-secondary)] no-underline transition-colors duration-150 hover:text-[var(--color-accent)]"
+        >
+          <Rss size={18} />
+          RSS
+        </a>
+      </div>
     </div>
   </div>
 </BaseLayout>
-
-<style>
-  .text-h1 {
-    font-size: 2rem;
-    line-height: 1.3;
-  }
-</style>
