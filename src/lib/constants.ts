@@ -1,9 +1,9 @@
 export const SITE = {
-  title: 'Dokivot',
-  description: 'Personal knowledge repository — deep technical writing on LLMs, ML, and systems.',
+  title: `Dokivot' Core Dump`,
+  description: 'Configuring the environment for unlimited curiosity.',
   url: 'https://dokivot.github.io',
   author: 'Dokivot',
-  locale: 'en-US',
+  locale: 'zh-CN',
 };
 
 export const NAV_ITEMS = [
@@ -16,7 +16,7 @@ export const NAV_ITEMS = [
 
 export const SOCIAL_LINKS = {
   github: 'https://github.com/Dokivot',
-  email: 'mailto:dokivot@outlook.com',
+  email: 'mailto:543803761@qq.com',
   twitter: 'https://x.com/Dokivot',
   scholar: 'https://scholar.google.com/citations?user=Dokivot',
 } as const;
